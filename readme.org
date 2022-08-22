@@ -93,5 +93,3 @@ docker run -it --rm crudeci sh -c "make run"   # to run Docker container
 - Program output not stored for bookkeeping. Currently logged to the terminal.
 - Program output formatting has room for improvements.
 - The structures declared are not in the optimal format.
-- Configuration logic hardcoded for JSON.
-- Version control logic hardcoded for Git.
