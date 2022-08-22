@@ -13,6 +13,7 @@ var (
 )
 
 func main() {
+	log.SetOutput(os.Stdout)
 	flag.Parse()
 	if err := run(); err != nil {
 		log.Printf("error: %v\n", err)

@@ -72,8 +72,8 @@ Below is a snippet from =config.json=:
 From the top level of this repository, run:
 
 #+begin_src shell
-docker build -t crudeci .                       # to build Docker image
-docker run -it --rm --name crudeci-test crudeci # to run Docker container
+docker build -t crudeci .                      # to build Docker image
+docker run -it --rm crudeci sh -c "make run"   # to run Docker container
 #+end_src
 
 ** Limitations
