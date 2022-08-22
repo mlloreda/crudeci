@@ -95,9 +95,9 @@ func runSequentially(jobs []*Job) {
 // 			time.Sleep(time.Second * time.Duration(intervalInSeconds))
 // 		}
 // 	}()
-// 	quitChannel := make(chan os.Signal, 1)
-// 	signal.Notify(quitChannel, syscall.SIGINT, syscall.SIGTERM)
-// 	<-quitChannel
+// 	quit := make(chan os.Signal, 1)
+// 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+// 	<-quit
 // 	log.Println("goodbye!")
 // }
 
