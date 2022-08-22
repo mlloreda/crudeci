@@ -1,0 +1,97 @@
+#+TITLE: crudeci
+
+=crudeci= is a rudimentary CI/CD system written in Go.
+
+There are three main constructs in =crude=
+
+- *Job*: represents a typical job in a CI/CD system
+- *Pipeline*: represents a sequence of steps to be executed as part of a =job=.
+- *Step*: represents a single step of execution in a =pipeline=.
+
+The ASCII diagram below visually represents a single job construct along with
+its sub-components:
+
+#+begin_src text
++------------------------------------------------------------------+
+| sample-job                                                       |
+| |                                                                |
+|  \-- Pipeline:                                                   |
+|      +---------------------------------------------------+       |
+|      | Steps:                                            |       |
+|      |    +-------+     +-------+              +-------+ |       |
+|      |    | build |     | test  |    ....      | step k| |       |
+|      |    +-------+     +-------+              +-------+ |       |
+|      +---------------------------------------------------+       |
+|                                                                  |
++------------------------------------------------------------------+
+#+end_src
+
+** Walk-through
+
+Upon starting, =crudeci= reads and parses the default configuration file,
+=config.json=, where jobs are declared and configured. =crudeci= provides a
+=-config= flag for the user to specify a non-default configuration file if
+desired.
+
+With the corresponding structs populated, =crudeci= (1) initializes each of the
+jobs by cloning the job repository if it does not already exist and (2) executes
+each of the steps declared in the pipeline within embedded in each of the jobs.
+See the =Job= struct in =job.go=. All assets resulting from the above two steps
+are placed in the =out/= sub-directory by default but user allowed to specify
+via the =-outdir= flag.
+
+The job pipelines in this project are rather simple, consisting of (1) build and
+(2) test steps, making this codebase more of a CI system than a CD system. That
+being said, the pipelines and steps are extensible. For example, to implement a
+deploy step - in =step.go= - declare a =DeployStep= struct, and satisfy the
+=Runner= interface by implementing the =Run()= method accordingly.
+
+** Configuration
+
+Below is a snippet from =config.json=:
+
+#+begin_src json
+[
+    {
+        "name": "sample-job",                        # Job name
+        "repo": "https://github.com/golang/example", # Job repo
+        "workingDir": "outyet/",                     # Job working directory
+        "build": "go build main.go",                 # Build step
+        "test": "go test -v"                         # Test step
+        "notify": "mig.lloreda@gmail.com",           # Job notification contact email
+    }
+]
+#+end_src
+
+** Requirements
+
+- Docker
+
+** Running
+
+From the top level of this repository, run:
+
+#+begin_src shell
+docker build -t crudeci .                       # to build Docker image
+docker run -it --rm --name crudeci-test crudeci # to run Docker container
+#+end_src
+
+** Limitations
+
+- Program executes in sequential manner for simplicity, though rudimentary
+  concurrent approach is provided in the =runConcurrently()= function (commented
+  out at the end of =main.go=).
+  - Thus, program terminates and thus does not watch for code changes to repositories.
+    - Extending the =Step= struct by creating a =PullStep= struct and satisfying
+      the =Runner= interface is an acceptable approach.
+- Job cleanup functionality missing but can be implemented by creating a
+  =CleanupStep= and satisfying the =Runner= interface with the appropriate
+  logic.
+- User not messaged with job status. As with limitations above, functionality
+  can be implemented by extending the =Step= struct.
+- Program doesn't preserve state.
+- Program output not stored for bookkeeping. Currently logged to the terminal.
+- Program output formatting has room for improvements.
+- The structures declared are not in the optimal format.
+- Configuration logic hardcoded for JSON.
+- Version control logic hardcoded for Git.

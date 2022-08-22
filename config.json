@@ -1,0 +1,18 @@
+[
+    {
+        "name": "sample-job",
+        "repo": "https://github.com/golang/example",
+        "workingDir": "outyet/",
+        "build": "go build main.go",
+        "test": "go test -v",
+        "notify": "mig.lloreda@gmail.com"
+    },
+    {
+        "name": "another-one",
+        "repo": "https://github.com/golang/example",
+        "workingDir": "stringutil/",
+        "build": "go build reverse.go",
+        "test": "go test",
+        "notify": "mig.lloreda@gmail.com"
+    }
+]
