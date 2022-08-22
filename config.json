@@ -5,7 +5,7 @@
         "workingDir": "outyet/",
         "build": "go build main.go",
         "test": "go test -v",
-        "notify": "mig.lloreda@gmail.com"
+        "notify": "user@domain.com"
     },
     {
         "name": "another-one",
@@ -13,6 +13,6 @@
         "workingDir": "stringutil/",
         "build": "go build reverse.go",
         "test": "go test",
-        "notify": "mig.lloreda@gmail.com"
+        "notify": "user@domain.com"
     }
 ]
